@@ -51,6 +51,11 @@ class User
      */
     private $posts;
 
+    public function __construct()
+    {
+        $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -134,6 +139,20 @@ class User
     public function setPosts($posts)
     {
         $this->posts = $posts;
+        
+        return $this;
+    }
+    
+    public function addPost($post)
+    {
+        $this->posts->add($post);
+        
+        return $this;
+    }
+    
+    public function removePost($post)
+    {
+        $this->posts->removeElement($post);
         
         return $this;
     }

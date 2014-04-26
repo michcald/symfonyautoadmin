@@ -1,52 +1,84 @@
 <?php
-// src/Acme/DemoBundle/Admin/PostAdmin.php
 
 namespace Acme\DemoBundle\Admin;
 
 use Sonata\AdminBundle\Admin\Admin;
-use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 class PostAdmin extends Admin
 {
-    // Fields to be shown on create/edit forms
-    protected function configureFormFields(FormMapper $formMapper)
-    {
-        $formMapper
-            ->add('title', 'text', array('label' => 'Post Title'))
-            ->add('published', 'datetime', array(
-                'label' => 'Post Title',
-                'required' => true
-            ))
-            ->add('authors', 'entity', array(
-                'class' => 'Acme\DemoBundle\Entity\User', 
-                //'property' => 'name',
-                'multiple' => true
-            ))
-            //->add('author', 'entity', array('class' => 'Acme\DemoBundle\Entity\User'))
-            ->add('body', 'textarea', array(
-                'required' => false
-            )) //if no type is specified, SonataAdminBundle tries to guess it
-        ;
-    }
-
-    // Fields to be shown on filter forms
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('authors')
+            ->add('id')
+            ->add('title')
+            ->add('body')
             ->add('published')
         ;
     }
 
-    // Fields to be shown on lists
+    /**
+     * @param ListMapper $listMapper
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('title')
+            ->add('id')
+            ->add('title')
+            ->add('body')
             ->add('published')
-            ->add('authors')
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'show' => array(),
+                    'edit' => array(),
+                    'delete' => array(),
+                )
+            ))
+        ;
+    }
+
+    /**
+     * @param FormMapper $formMapper
+     */
+    protected function configureFormFields(FormMapper $formMapper)
+    {
+        $formMapper
+            ->add('id')
+            ->add('title')
+            ->add('body')
+            ->add('published')
+            ->add('authors', null, array(
+                'required' => false
+            ))
+        ;
+    }
+
+    /**
+     * @param ShowMapper $showMapper
+     */
+    protected function configureShowFields(ShowMapper $showMapper)
+    {
+        $showMapper
+            ->add('id')
+            ->add('title')
+            ->add('body')
+            ->add('published')
+            ->add('authors', 'sonata_type_collection',
+                array(
+                    'required' => false,
+                    'by_reference' => false
+                ),
+                array(
+                    'edit' => 'inline',
+                    'inline' => 'table',
+                    'allow_delete' => true
+                ))
         ;
     }
 }

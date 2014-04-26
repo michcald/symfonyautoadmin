@@ -31,7 +31,7 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(name="body", type="text")
+     * @ORM\Column(name="body", type="text", nullable=true)
      */
     private $body;
 
@@ -53,6 +53,11 @@ class Post
      */
     private $authors;
 
+    public function __construct()
+    {
+        $this->published = new \DateTime('NOW');
+        $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -154,5 +159,14 @@ class Post
     public function getAuthors()
     {
         return $this->authors;
+    }
+    
+    public function __toString()
+    {
+        if ($this->title) {
+            return $this->published->format('Y-m-d') . ' - ' . $this->title;
+        }
+        
+        return 'New Post';
     }
 }

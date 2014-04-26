@@ -1,21 +1,13 @@
 services:
-    sonata.admin.post:
-        class: Acme\DemoBundle\Admin\PostAdmin
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: "Posts", label: "Post" }
-        arguments:
-            - ~
-            - Acme\DemoBundle\Entity\Post
-            - ~
-        calls:
-            - [ setTranslationDomain, [AcmeDemoBundle]]
-    sonata.admin.user:
+    
+    acme_demo.admin.user:
         class: Acme\DemoBundle\Admin\UserAdmin
+        arguments: [~, Acme\DemoBundle\Entity\User, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Users", label: "Users" }
-        arguments:
-            - ~
-            - Acme\DemoBundle\Entity\User
-            - ~
-        calls:
-            - [ setTranslationDomain, [AcmeDemoBundle]]
+            - {name: sonata.admin, manager_type: orm, group: admin, label: User}
+
+    acme_demo.admin.post:
+        class: Acme\DemoBundle\Admin\PostAdmin
+        arguments: [~, Acme\DemoBundle\Entity\Post, SonataAdminBundle:CRUD]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: admin, label: Post}
